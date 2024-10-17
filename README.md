@@ -2,25 +2,6 @@
 
 This tutorial is designed for Node.js developers who are interested in learning how to create a web server using Rust and Actix-web. We'll go through the process step-by-step, comparing the Rust code with equivalent Node.js code to make the transition smoother.
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Project Setup](#project-setup)
-- [Adding Dependencies](#adding-dependencies)
-- [Writing the Server Code](#writing-the-server-code)
-  - [Main Function](#main-function)
-  - [Route Handlers](#route-handlers)
-- [Understanding Serialization](#understanding-serialization)
-  - [Deserialize Trait](#deserialize-trait)
-  - [Serialize Trait](#serialize-trait)
-- [Middleware](#middleware)
-- [Comparing with Node.js Code](#comparing-with-nodejs-code)
-- [Running the Server](#running-the-server)
-- [Testing the Endpoints](#testing-the-endpoints)
-- [Conclusion](#conclusion)
-- [Further Reading](#further-reading)
-
 ## Introduction
 
 Rust is a systems programming language that emphasizes safety, speed, and concurrency. Actix-web is a high-performance web framework for Rust, enabling developers to create robust web applications. This tutorial is tailored for Node.js developers who are interested in transitioning to Rust, providing a step-by-step guide to creating a web server using Actix-web while comparing it with similar implementations in Node.js.
@@ -138,3 +119,90 @@ The main function is the entry point of your application. Here’s a breakdown o
  - ```.bind("127.0.0.1:3000")``` binds the server to the specified address and port.
  - ```.run().await``` starts the server asynchronously.
 
+
+## Route Handlers
+
+In this section, you will define various route handlers that respond to specific HTTP requests:
+
+ - GET /users: Returns a JSON representation of a person.
+ - POST /users: Accepts JSON data and returns a confirmation message.
+ - GET /users/{id}: Returns the user ID based on the path parameter.
+
+## Understanding Serialization
+
+Serialization is the process of converting a data structure into a format that can be easily stored or transmitted. In Rust, you can use the Serde library to handle this process.
+
+## Deserialize Trait
+
+The Deserialize trait allows Rust to convert JSON data into Rust structs. In the code, we defined a struct Info that will hold the name passed in a JSON payload.
+
+## Serialize Trait
+
+The Serialize trait enables Rust to convert Rust structs into JSON format. In the code, the Person struct is defined to hold a name and age, which can be converted to JSON when sending a response.
+
+## Middleware
+
+Middleware in Actix-web provides a way to execute code before or after handling requests. In this example, the Logger middleware is used to log incoming HTTP requests, helping with debugging and monitoring.
+
+## Comparing with Node.js Code
+
+For those familiar with Node.js and Express.js, here’s how a similar server would look:
+
+```
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.get('/users', (req, res) => {
+    res.json({ name: 'Good!', age: '21' });
+});
+
+app.post('/users', (req, res) => {
+    res.json(`Received name: ${req.body.name}`);
+});
+
+app.get('/users/:id', (req, res) => {
+    res.send(`User ID is ${req.params.id}`);
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
+});
+
+```
+
+## Running the Server
+
+To run the server, execute the following command in your terminal:
+
+```
+  cargo run
+```
+
+This command will start the Actix-web server at ``http://localhost:3000``.
+
+
+## Testing the Endpoints
+
+You can test your endpoints using tools like Postman or cURL. Here are some examples:
+
+- GET /users:
+
+```
+curl http://localhost:3000/users
+```
+- POST /users:
+
+```
+curl -X POST -H "Content-Type: application/json" -d '{"name": "John"}' http://localhost:3000/users
+```
+- GET /users/{id}:
+
+```
+curl http://localhost:3000/users/1
+```
+
+
+## Conclusion
+
+Congratulations! You’ve successfully built a web server using Rust and Actix-web, comparable to a Node.js/Express.js server. This experience should provide a solid foundation for exploring further Rust web development.
